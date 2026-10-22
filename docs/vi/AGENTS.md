@@ -16,7 +16,7 @@ fullmark biến một file Markdown thành một file HTML quiz offline, tự ch
 
 ## Việc 1: soạn một quiz
 
-1. Đọc tài liệu nguồn, rồi chạy `quiz guide`.
+1. Đọc tài liệu nguồn, rồi chạy `quiz guide`. Với slide hoặc PDF, đọc mỗi trang hai lần: lớp chữ (chỉ OCR với trang scan) để lấy nội dung chữ, và ảnh render của trang để xem hình, bảng, sơ đồ và nhãn. Một slide ít chữ thường là một hình chứa kiến thức. Dùng công cụ PDF và ảnh mà môi trường của bạn có.
 2. Viết `quiz.md`: phần đầu YAML (bắt buộc có `title`; đặt trong ngoặc kép nếu có dấu hai chấm), các phần `#` tùy chọn, các câu hỏi `##`.
 3. Chạy `quiz check quiz.md` (thêm `--json` để đọc kết quả bằng máy). Đầu ra có dạng `file:line: error|warning: qN (type): message`. Sửa mọi lỗi; sửa cả cảnh báo, thường là thiếu `> [!explanation]`. `quiz check` còn bắt các câu hỏi yếu (giải thích quá ngắn, "tất cả các ý trên", đáp án đúng dài hơn hẳn các lựa chọn khác, đáp án lộ trong đề, vị trí đáp án lệch). Hãy sửa cả những lỗi này; đó là lỗi agent hay mắc. `quiz inspect quiz.md` cho thấy dạng câu, điểm, các phần, thẻ và vị trí đáp án, để bạn đối chiếu độ bao phủ với tài liệu nguồn.
 4. Trong lúc sửa, `quiz watch quiz.md` dựng lại mỗi lần lưu (tải lại trang sau mỗi lần dựng, hoặc dùng `--serve` để trình duyệt tự tải lại).

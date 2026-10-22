@@ -77,6 +77,7 @@ An agent-written quiz can have a wrong answer key, or a question that is not in 
 
 ## Rules for good questions
 
+- Read the material fully first. For slides or a PDF, read every page twice: the text layer (OCR only for scanned pages) for the words, and a rendered image of the page for figures, tables, diagrams and labels. A slide with little text is usually a figure that holds the fact. Use whatever PDF and image tools your environment provides. Skipping figure-only slides is the usual cause of thin coverage.
 - Never put the answer, or a giveaway, in the question text. Never reuse the explanation's wording in the prompt.
 - Distractors must be plausible: common misconceptions, off-by-one values, near-synonyms. No joke options.
 - One concept per question. Numeric answers need units, a tolerance and a dot decimal.

@@ -19,9 +19,12 @@ Proposals, not commitments. Order within each section is rough priority. Items m
 - ~~After Submit: a "review wrong answers only" filter, and a "retry missed questions" mode.~~ Done.
 - Print or PDF view that includes the answer key and explanations.
 - Optional spaced repetition across attempts (needs a place to keep history; localStorage is per browser).
+- Take one section only: `--section "Chapter 3 Part 2"` on `quiz serve` and `quiz library take` (and a section picker on the start screen), so a 60-question quiz can be done in sittings. The sections already exist; the draw works like a bank (`attempt.bank.drawn` lists the section's questions), so `quiz grade` and `stats` need no new format.
 
 ## Authoring
 
+- A `source` heading attribute (next up: it also makes skipped material visible), e.g. `{source="Ch1 p23"}`, instead of the slide or page number buried in the explanation. The report can then list what to reread for the missed questions, and `quiz check` (with the brief's `content/`) or `quiz inspect` can list slides or pages no question covers, which shows thin coverage of figure-only slides. Decide the format (free text or `file:page`) and how `brief.past-exams`' `Source:` note fits in.
+- ~~`quiz extract DIR`~~: dropped. Agents use their own PDF and image tools to read every page as text and as an image, and the guide, agent guide and skill now say how; `source=` coverage in `quiz check` catches skipped pages.
 - ~~`quiz watch quiz.md`~~: done (rebuilds on save). Still open: reload the open page automatically; the page's CSP blocks network, so that needs a watch-only build or a local server.
 - ~~`quiz serve`~~: done (sends the answers straight back to the waiting tool; see `docs/plans/SERVE_PLAN.md`).
 - ~~Question banks~~: done (`pick` in front matter or on sections). Still open: weighting by tag, "never repeat the last draw", and a bank-aware retry of missed questions.
@@ -71,6 +74,7 @@ Deferred, each to be added only when the need shows up:
 - `quiz library replay NAME [--attempt STAMP]` (planned for 0.11.0): open a past attempt as a page that is already submitted, with your answers, right and wrong, explanations, and "retry missed questions" working. A results file plus the version's `.md` it was taken on hold the whole question-and-answer picture, so this is mostly core: `quiz build --attempt results.json` builds the page in the submitted state (static, no server), and the library wrapper finds the attempt and its version the way `grade` does, builds into a temp folder and opens it. Not named `review`: `quiz review` is the question-review form. Check first whether `quiz.js` can start in the submitted state from embedded data without a rework (autosave already injects saved answers). Agent-graded essays and code show as pending in a first version; showing the grades from `reports/` comes later.
 - Tags or collections, several users, several libraries per machine, importing old `results.json` files.
 - Spaced repetition (see Learner experience): it now has a place for its history, because every attempt is filed in the library next to the version it was made with.
+- `quiz library take NAME --missed`: draw only questions answered wrong or partly right in earlier attempts, across all attempts (not just the last, as **Retry missed** does). A first step towards spaced repetition with no new storage; questions are matched across versions by id, so it works best with `{id=...}`.
 
 - `quiz library --web`: parked. A page on 127.0.0.1 that shows `list` and `status`, changes quizzes and starts a `take`. It is the human face (tooling principle 5) for the same operations as the CLI, so it calls the same library functions and adds no logic of its own. It needs a long-running server, unlike the one-shot `serve` and `take`: bind to 127.0.0.1 only, keep the token, exit on Ctrl+C or after an idle timeout. Prerequisite: library v1 in use for a while, so the page shows what you actually check.
 

@@ -12,7 +12,7 @@ fullmark turns one Markdown file into one offline, self-grading HTML quiz. This 
 
 ## Job 1: author a quiz
 
-1. Read the source material, then run `quiz guide`.
+1. Read the source material, then run `quiz guide`. For slides or a PDF, read every page twice: the text layer (OCR only for scanned pages) for the words, and a rendered image of the page for figures, tables, diagrams and labels. A slide with little text is usually a figure that holds the fact. Use whatever PDF and image tools your environment provides.
 2. Write `quiz.md`: YAML front matter (`title` required; quote it if it contains a colon), optional `#` sections, `##` questions.
 3. Run `quiz check quiz.md` (add `--json` to parse findings). Output is `file:line: error|warning: qN (type): message`. Fix every error; fix warnings too, usually a missing `> [!explanation]`. `quiz check` also lints for weak questions (short explanation, "all of the above", a correct option much longer than the rest, answer in the question text, skewed answer positions). Fix those too; they are the usual agent mistakes. `quiz inspect quiz.md` shows types, points, sections, tags and answer positions, so you can check coverage against the source material.
 4. While iterating, `quiz watch quiz.md` rebuilds on every save (reload the page after each rebuild, or use `--serve` to have the browser reload by itself).
