@@ -157,8 +157,8 @@ wheels = [
 ]
 
 [[package]]
-name = "fullmark"
-version = "0.10.2"
+name = "fullmark-py"
+version = "0.10.3"
 source = { editable = "." }
 dependencies = [
     { name = "jinja2" },

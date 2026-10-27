@@ -1,3 +1,39 @@
+# fullmark-py
+
+> **This is the frozen 0.10.x Python line of fullmark.** It is kept as the survey server for
+> document-kit and presentation-kit (serve a short survey, read the answers back). The `quiz`
+> command and all quiz work now belong to fullmark 1.0:
+> <https://github.com/Hung-nd233960/fullmark>. This package installs `fullmark-py`, not `quiz`.
+
+Depend on it by git tag (`pyproject.toml`):
+
+```toml
+dependencies = ["fullmark-py @ git+https://github.com/Hung-nd233960/fullmark-py@v0.10.3"]
+```
+
+Serve a survey once and get the answers as a dict:
+
+```python
+from fullmark import SurveyError, SurveyTimeout, serve_survey
+
+try:
+    results = serve_survey(
+        "survey.md",
+        out="results.json",
+        timeout=600,  # seconds; 0 = no limit
+        open_browser=True,
+        on_url=lambda url: print("open", url),
+    )
+except SurveyTimeout:
+    ...  # nobody submitted in time
+except SurveyError as exc:
+    ...  # the survey did not build, or the server could not start
+```
+
+The rest of this README describes the 0.10.x program as it was.
+
+---
+
 # Fullmark Alchemist
 
 English | [Tiếng Việt](docs/vi/README.md)

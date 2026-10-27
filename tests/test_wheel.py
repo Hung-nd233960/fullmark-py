@@ -27,7 +27,7 @@ def run(cmd, cwd):
 def test_installed_wheel_creates_builds_and_prints_guides(tmp_path):
     dist = tmp_path / "dist"
     run([UV, "build", "--wheel", "--out-dir", str(dist), str(ROOT)], tmp_path)
-    (wheel,) = dist.glob("fullmark-*.whl")
+    (wheel,) = dist.glob("fullmark_py-*.whl")
 
     venv = tmp_path / "venv"
     run(

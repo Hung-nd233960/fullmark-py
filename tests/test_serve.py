@@ -12,6 +12,7 @@ import pytest
 from helpers import validate_results
 from test_report import RESPONSES, SURVEY_RESPONSES, make_results
 
+from fullmark import SurveyError, SurveyTimeout, serve_survey
 from fullmark.build import build_html
 from fullmark.cli import main, serve
 from fullmark.serve import SubmitServer, quiz_id_of_html, quiz_meta_of_html
@@ -486,3 +487,52 @@ def test_serve_and_take_accept_focus():
     assert parser.parse_args(["serve", "q.md", "--focus"]).focus is True
     assert parser.parse_args(["library", "take", "x", "--focus"]).focus is True
     assert parser.parse_args(["serve", "q.md"]).focus is False
+
+
+def _post_when_ready(urls, results):
+    for _ in range(200):
+        if urls:
+            break
+        time.sleep(0.02)
+    base, token = urls[0].split("/?t=")
+    req = urllib.request.Request(
+        base + "/submit",
+        json.dumps(results).encode("utf-8"),
+        {"Content-Type": "application/json", "X-Fullmark-Token": token},
+        method="POST",
+    )
+    urllib.request.urlopen(req, timeout=10).read()
+
+
+def test_serve_survey_returns_the_results(survey, tmp_path, capsys):
+    src, results = survey
+    out = tmp_path / "answers.json"
+    urls: list[str] = []
+    t = threading.Thread(target=_post_when_ready, args=(urls, results))
+    t.start()
+    got = serve_survey(
+        src, out=out, timeout=20, open_browser=False, on_url=urls.append
+    )
+    t.join(10)
+    assert len(urls) == 1 and urls[0].startswith("http://127.0.0.1:")
+    assert got == json.loads(out.read_text(encoding="utf-8"))
+    assert got["quiz"]["id"] == results["quiz"]["id"]
+    captured = capsys.readouterr()
+    assert captured.out == "" and captured.err == ""
+
+
+def test_serve_survey_times_out(survey, tmp_path):
+    src, _ = survey
+    with pytest.raises(SurveyTimeout):
+        serve_survey(src, out=tmp_path / "x.json", timeout=0.3, open_browser=False)
+    assert not (tmp_path / "x.json").exists()
+
+
+def test_serve_survey_rejects_a_bad_source(tmp_path):
+    with pytest.raises(SurveyError, match="no such file"):
+        serve_survey(tmp_path / "missing.md", open_browser=False)
+    bad = tmp_path / "bad.md"
+    bad.write_text("---\ntitle: Bad\n---\n\n## Q\n", encoding="utf-8")
+    with pytest.raises(SurveyError) as exc:
+        serve_survey(bad, open_browser=False)
+    assert not isinstance(exc.value, SurveyTimeout)

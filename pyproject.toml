@@ -1,7 +1,7 @@
 [project]
-name = "fullmark"
-version = "0.10.2"
-description = "Turn a Markdown file into a self-contained, self-grading HTML quiz."
+name = "fullmark-py"
+version = "0.10.3"
+description = "The frozen fullmark 0.10.x line (Python), kept as the survey server for document-kit and presentation-kit. Quizzes moved to fullmark 1.0: https://github.com/Hung-nd233960/fullmark"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
@@ -30,8 +30,7 @@ dependencies = [
 ]
 
 [project.scripts]
-quiz = "fullmark.cli:main"
-fullmark = "fullmark.cli:main"
+fullmark-py = "fullmark.cli:main"
 
 [dependency-groups]
 dev = ["pytest>=8", "playwright>=1.45", "matplotlib>=3.8", "jsonschema>=4.26.0"]
